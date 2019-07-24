@@ -34,8 +34,11 @@ self.addEventListener('fetch', function(event) {
     caches.open(appCacheName).then(function(cache) {
       return cache.match(event.request).then(function (response) {
         return response || fetch(event.request).then(function(response) {
+          const fetchUrl = event.request.url;
+          if(fetchUrl.startsWith("http://localhost")){
           cache.put(event.request, response.clone());
           return response;
+        }
         });
       });
     })
